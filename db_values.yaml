@@ -1,0 +1,42 @@
+replicaCount: 2
+image:
+  registry: docker.io
+  repository: bitnami/mariadb-galera
+  tag: 10.5
+  pullPolicy: IfNotPresent
+
+rootUser:
+  user: root1
+  password: REPLACE_WITH_ROOT_PASSWORD
+
+diagnosticMode:
+  enabled: false	
+service:
+  type: ClusterIP
+  port: 3306
+
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessModes:
+    - ReadWriteOnce
+  size: 2Gi
+db:
+  name: wordpress
+  user: user
+  password: REPLACE_WITH_DB_PASSWORD
+galera:
+  name: db
+  bootstrap:
+    forceSafeToBootstrap: true
+customDatabase:
+  name: wordpress
+extraUsers:
+  - name: user
+    password: REPLACE_WITH_DB_PASSWORD
+    privileges: "wordpress.*:ALL"
+
+# initdbScripts:
+#   create_database.sql: |
+#     CREATE DATABASE IF NOT EXISTS wordpress;
