@@ -1,0 +1,4 @@
+minio/minio
+*.tfstate
+*.tfstate.*
+.terraform/
