@@ -31,7 +31,8 @@ spec:
     spec:
       containers:
         - name: minio
-          image: minio/minio:latest
+          image: local/minio:latest
+          imagePullPolicy: IfNotPresent
           args:
             - server
             - /data
