@@ -1,0 +1,16 @@
+[Unit]
+Description=Demarrage de minikube
+After=docker.service network-online.target
+Wants=docker.service network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=ayoub
+Environment=HOME=/home/ayoub
+ExecStart=/usr/local/bin/minikube start
+ExecStop=/usr/local/bin/minikube stop
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

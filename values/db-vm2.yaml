@@ -1,0 +1,11 @@
+primary:
+  extraFlags: "--log-bin=mysql-bin --server-id=2"
+  persistence:
+    size: 500Mi
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 256Mi
+      cpu: 300m

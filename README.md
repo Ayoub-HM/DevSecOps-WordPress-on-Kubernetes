@@ -1,13 +1,12 @@
-# WordPress local en Kubernetes
+# WordPress local sur Kubernetes
 
-Ce projet fournit une installation locale de WordPress avec MariaDB et MinIO S3-compatible sur Minikube.
+Ce projet déploie WordPress et MariaDB sur un cluster Minikube.
 
 ## Composants
 
 - WordPress avec le chart Bitnami
-- MariaDB standalone
-- MinIO pour le stockage d'objets S3
-- Kubernetes et Docker via Minikube
+- MariaDB avec le chart Bitnami
+- Kubernetes via Minikube
 
 ## Prérequis
 
@@ -15,38 +14,55 @@ Ce projet fournit une installation locale de WordPress avec MariaDB et MinIO S3-
 - Minikube
 - kubectl
 - Helm
-- Go
 
-## Démarrage
+## Déploiement
+
+Démarrer Minikube sur chaque VM :
 
 ```bash
 minikube start --driver=docker
-helm repo add bitnami https://charts.bitnami.com/bitnami
-
-helm upgrade --install mariadb-release oci://registry-1.docker.io/bitnamicharts/mariadb \
-  --values db_values.yaml
-
-./build-minio.sh
-minikube image load local/minio:latest
-kubectl apply -f minio.yaml
-
-helm upgrade --install wordpress-release oci://registry-1.docker.io/bitnamicharts/wordpress \
-  --values wp_values.yaml
 ```
 
-## MinIO
+Déployer MariaDB avec le fichier propre à la VM.
 
-La source MinIO est fournie dans le dossier `minio`. L'image locale est construite à partir du code source afin d'éviter les images publiques qui ne sont plus maintenues.
-
-- API S3 : `http://localhost:9000`
-- Console : `http://localhost:9001`
-- utilisateur : `minioadmin`
-- mot de passe : `minioadmin`
-
-## Nettoyage
+VM 1 (copie) :
 
 ```bash
-helm uninstall wordpress-release
-helm uninstall mariadb-release
-kubectl delete -f minio.yaml
+helm upgrade --install mariadb-release oci://registry-1.docker.io/bitnamicharts/mariadb --version 28.1.1 \
+  -f db_values.yaml -f values/db-vm1.yaml
 ```
+
+VM 2 (active) :
+
+```bash
+helm upgrade --install mariadb-release oci://registry-1.docker.io/bitnamicharts/mariadb --version 28.1.1 \
+  -f db_values.yaml -f values/db-vm2.yaml
+```
+
+Déployer WordPress.
+
+VM 1 :
+
+```bash
+helm upgrade --install wordpress-release oci://registry-1.docker.io/bitnamicharts/wordpress --version 34.1.3 \
+  -f wp_values.yaml
+```
+
+VM 2 :
+
+```bash
+helm upgrade --install wordpress-release oci://registry-1.docker.io/bitnamicharts/wordpress --version 34.1.3 \
+  -f wp_values.yaml -f values/wp-vm2.yaml
+```
+
+Ne jamais utiliser le fichier de valeurs d’une VM sur l’autre. Des `server-id` identiques cassent la réplication ; une taille de disque différente peut faire refuser une mise à niveau.
+
+Pour accéder au site :
+
+```bash
+minikube service wordpress-release --url
+```
+
+## Haute disponibilité
+
+Voir [ops/README.md](ops/README.md) pour les consignes d’exploitation et de bascule.
