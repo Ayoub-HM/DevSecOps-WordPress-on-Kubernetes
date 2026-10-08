@@ -1,21 +1,35 @@
 # Terraform
-*.tfstate
-*.tfstate.*
+# Ignore les fichiers d'état locaux de Terraform.
+*.tfstate*
+# Ignore le répertoire de travail local de Terraform.
 .terraform/
+# Ignore les fichiers de variables Terraform, souvent propres à un environnement.
 *.tfvars
 
 # Dumps et sauvegardes (contiennent des données et des empreintes de mots de passe)
+# Ignore les exports SQL qui peuvent contenir les données applicatives.
 *.sql
+# Ignore les exports SQL compressés qui contiennent les mêmes données.
 *.sql.gz
+# Ignore les copies de sauvegarde locales.
 backups/
 
 # Fichiers d'accès et secrets
+# Ignore les fichiers kubeconfig nommés kubeconfig* à tous les niveaux.
 kubeconfig*
+# Ignore les kubeconfig portant l'extension dédiée.
 *.kubeconfig
-.env
-.env.*
+# Ignore les fichiers d'environnement .env et leurs variantes.
+.env*
+# Ignore les certificats et clés privées PEM.
 *.pem
+# Ignore les fichiers de clés privées.
 *.key
+# Ignore les rapports de scan bruts, qui peuvent contenir des éléments sensibles.
+reports/*-raw*
+# Ignore aussi les kubeconfig imbriqués dans l'ancien arbre Liqo.
+liqo/**/kubeconfig*
 
 # Ancien MinIO
+# Ignore les anciens fichiers locaux du composant retiré.
 minio/
