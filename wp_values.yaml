@@ -1,16 +1,15 @@
 externalDatabase:
+  existingSecret: wordpress-credentials
   host: mariadb-release.default.svc.cluster.local
   port: 3306
   user: user
-  password: "DbPass123!"
   database: wordpress
 
+existingSecret: wordpress-credentials
 wordpressDatabaseHost: mariadb-release.default.svc.cluster.local
 wordpressDatabaseName: wordpress
 wordpressDatabaseUser: user
-wordpressDatabasePassword: "DbPass123!"
 wordpressUsername: admin
-wordpressPassword: "WpPass123!"
 persistence:
   enabled: true
   size: 1Gi
