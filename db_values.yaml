@@ -7,7 +7,6 @@ auth:
 primary:
   persistence:
     enabled: true
-    size: 2Gi
 
 service:
   type: ClusterIP

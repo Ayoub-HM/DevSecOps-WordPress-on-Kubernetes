@@ -1,0 +1,1 @@
+* * * * * /home/ayoub/sync-uploads.sh >> /home/ayoub/sync-uploads.log 2>&1

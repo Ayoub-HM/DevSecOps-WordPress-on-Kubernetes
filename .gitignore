@@ -1,4 +1,21 @@
-minio/minio
+# Terraform
 *.tfstate
 *.tfstate.*
 .terraform/
+*.tfvars
+
+# Dumps et sauvegardes (contiennent des données et des empreintes de mots de passe)
+*.sql
+*.sql.gz
+backups/
+
+# Fichiers d'accès et secrets
+kubeconfig*
+*.kubeconfig
+.env
+.env.*
+*.pem
+*.key
+
+# Ancien MinIO
+minio/

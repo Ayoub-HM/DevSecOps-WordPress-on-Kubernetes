@@ -1,0 +1,4 @@
+primary:
+  extraFlags: "--log-bin=mysql-bin --server-id=1 --read-only=1"
+  persistence:
+    size: 2Gi
