@@ -1,0 +1,288 @@
+[
+    {
+        "check_type": "kubernetes",
+        "results": {
+            "failed_checks": [
+                {
+                    "check_id": "CKV_K8S_21",
+                    "bc_check_id": "BC_K8S_20",
+                    "check_name": "The default namespace should not be used",
+                    "check_result": {
+                        "result": "FAILED",
+                        "evaluated_keys": []
+                    },
+                    "code_block": [
+                        [
+                            1,
+                            "apiVersion: v1\n"
+                        ],
+                        [
+                            2,
+                            "kind: Secret\n"
+                        ],
+                        [
+                            3,
+                            "metadata:\n"
+                        ],
+                        [
+                            4,
+                            "  name: mariadb-credentials\n"
+                        ],
+                        [
+                            5,
+                            "  namespace: default\n"
+                        ],
+                        [
+                            6,
+                            "type: Opaque\n"
+                        ],
+                        [
+                            7,
+                            "stringData:\n"
+                        ],
+                        [
+                            8,
+                            "  mariadb-root-password: \"<DB_ROOT_PASSWORD>\"\n"
+                        ],
+                        [
+                            9,
+                            "  mariadb-password: \"<DB_PASSWORD>\"\n"
+                        ],
+                        [
+                            10,
+                            "---\n"
+                        ]
+                    ],
+                    "file_path": "/k8s/secrets.example.yaml",
+                    "file_abs_path": "/home/ayoub/DevSecOps-WordPress-on-Kubernetes/k8s/secrets.example.yaml",
+                    "repo_file_path": "/k8s/secrets.example.yaml",
+                    "file_line_range": [
+                        1,
+                        10
+                    ],
+                    "resource": "Secret.default.mariadb-credentials",
+                    "evaluations": {},
+                    "check_class": "checkov.kubernetes.checks.resource.k8s.DefaultNamespace",
+                    "fixed_definition": null,
+                    "entity_tags": null,
+                    "caller_file_path": null,
+                    "caller_file_line_range": null,
+                    "resource_address": null,
+                    "severity": null,
+                    "bc_category": null,
+                    "benchmarks": null,
+                    "description": null,
+                    "short_description": null,
+                    "vulnerability_details": null,
+                    "connected_node": null,
+                    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-20",
+                    "details": [],
+                    "check_len": null,
+                    "definition_context_file_path": null
+                },
+                {
+                    "check_id": "CKV_K8S_21",
+                    "bc_check_id": "BC_K8S_20",
+                    "check_name": "The default namespace should not be used",
+                    "check_result": {
+                        "result": "FAILED",
+                        "evaluated_keys": []
+                    },
+                    "code_block": [
+                        [
+                            11,
+                            "apiVersion: v1\n"
+                        ],
+                        [
+                            12,
+                            "kind: Secret\n"
+                        ],
+                        [
+                            13,
+                            "metadata:\n"
+                        ],
+                        [
+                            14,
+                            "  name: wordpress-credentials\n"
+                        ],
+                        [
+                            15,
+                            "  namespace: default\n"
+                        ],
+                        [
+                            16,
+                            "type: Opaque\n"
+                        ],
+                        [
+                            17,
+                            "stringData:\n"
+                        ],
+                        [
+                            18,
+                            "  wordpress-password: \"<WORDPRESS_PASSWORD>\"\n"
+                        ],
+                        [
+                            19,
+                            "  mariadb-password: \"<DB_PASSWORD>\""
+                        ]
+                    ],
+                    "file_path": "/k8s/secrets.example.yaml",
+                    "file_abs_path": "/home/ayoub/DevSecOps-WordPress-on-Kubernetes/k8s/secrets.example.yaml",
+                    "repo_file_path": "/k8s/secrets.example.yaml",
+                    "file_line_range": [
+                        11,
+                        19
+                    ],
+                    "resource": "Secret.default.wordpress-credentials",
+                    "evaluations": {},
+                    "check_class": "checkov.kubernetes.checks.resource.k8s.DefaultNamespace",
+                    "fixed_definition": null,
+                    "entity_tags": null,
+                    "caller_file_path": null,
+                    "caller_file_line_range": null,
+                    "resource_address": null,
+                    "severity": null,
+                    "bc_category": null,
+                    "benchmarks": null,
+                    "description": null,
+                    "short_description": null,
+                    "vulnerability_details": null,
+                    "connected_node": null,
+                    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/kubernetes-policies/kubernetes-policy-index/bc-k8s-20",
+                    "details": [],
+                    "check_len": null,
+                    "definition_context_file_path": null
+                }
+            ]
+        },
+        "summary": {
+            "passed": 0,
+            "failed": 2,
+            "skipped": 0,
+            "parsing_errors": 0,
+            "resource_count": 2,
+            "checkov_version": "3.3.26"
+        }
+    },
+    {
+        "check_type": "terraform_plan",
+        "results": {
+            "failed_checks": []
+        },
+        "summary": {
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "parsing_errors": 1,
+            "resource_count": 0,
+            "checkov_version": "3.3.26"
+        }
+    },
+    {
+        "check_type": "secrets",
+        "results": {
+            "failed_checks": [
+                {
+                    "check_id": "CKV_SECRET_6",
+                    "bc_check_id": "BC_GIT_6",
+                    "check_name": "Base64 High Entropy String",
+                    "check_result": {
+                        "result": "FAILED"
+                    },
+                    "code_block": [
+                        [
+                            2,
+                            "  existingSecret: mari**********\n"
+                        ]
+                    ],
+                    "file_path": "/db_values.yaml",
+                    "file_abs_path": "/home/ayoub/DevSecOps-WordPress-on-Kubernetes/db_values.yaml",
+                    "repo_file_path": "/db_values.yaml",
+                    "file_line_range": [
+                        2,
+                        3
+                    ],
+                    "resource": "448f79e715878ca262bc35db2c01c66988ee306b",
+                    "evaluations": null,
+                    "check_class": "",
+                    "fixed_definition": null,
+                    "entity_tags": null,
+                    "caller_file_path": null,
+                    "caller_file_line_range": null,
+                    "resource_address": null,
+                    "severity": null,
+                    "bc_category": null,
+                    "benchmarks": null,
+                    "description": null,
+                    "short_description": null,
+                    "vulnerability_details": null,
+                    "connected_node": null,
+                    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/secrets-policies/secrets-policy-index/git-secrets-6",
+                    "details": [],
+                    "check_len": null,
+                    "definition_context_file_path": null,
+                    "validation_status": "Unavailable",
+                    "added_commit_hash": "",
+                    "removed_commit_hash": "",
+                    "added_by": "",
+                    "removed_date": "",
+                    "added_date": ""
+                },
+                {
+                    "check_id": "CKV_SECRET_6",
+                    "bc_check_id": "BC_GIT_6",
+                    "check_name": "Base64 High Entropy String",
+                    "check_result": {
+                        "result": "FAILED"
+                    },
+                    "code_block": [
+                        [
+                            2,
+                            "  existingSecret: wordp**********\n"
+                        ]
+                    ],
+                    "file_path": "/wp_values.yaml",
+                    "file_abs_path": "/home/ayoub/DevSecOps-WordPress-on-Kubernetes/wp_values.yaml",
+                    "repo_file_path": "/wp_values.yaml",
+                    "file_line_range": [
+                        2,
+                        3
+                    ],
+                    "resource": "87ba26cbf4d25ee3065a6ed032d96e01b3413c06",
+                    "evaluations": null,
+                    "check_class": "",
+                    "fixed_definition": null,
+                    "entity_tags": null,
+                    "caller_file_path": null,
+                    "caller_file_line_range": null,
+                    "resource_address": null,
+                    "severity": null,
+                    "bc_category": null,
+                    "benchmarks": null,
+                    "description": null,
+                    "short_description": null,
+                    "vulnerability_details": null,
+                    "connected_node": null,
+                    "guideline": "https://docs.prismacloud.io/en/enterprise-edition/policy-reference/secrets-policies/secrets-policy-index/git-secrets-6",
+                    "details": [],
+                    "check_len": null,
+                    "definition_context_file_path": null,
+                    "validation_status": "Unavailable",
+                    "added_commit_hash": "",
+                    "removed_commit_hash": "",
+                    "added_by": "",
+                    "removed_date": "",
+                    "added_date": ""
+                }
+            ]
+        },
+        "summary": {
+            "passed": 0,
+            "failed": 2,
+            "skipped": 0,
+            "parsing_errors": 0,
+            "resource_count": 2,
+            "checkov_version": "3.3.26"
+        }
+    }
+]
