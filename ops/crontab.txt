@@ -1,1 +1,2 @@
+CIBLE=172.17.169.20
 * * * * * /home/ayoub/sync-uploads.sh >> /home/ayoub/sync-uploads.log 2>&1

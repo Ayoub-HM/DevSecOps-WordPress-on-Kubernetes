@@ -11,6 +11,8 @@ VM active ── uploads WordPress via cron ──────────> VM c
 
 Le relais `relais-mariadb` et le cron de copie des uploads tournent uniquement sur la VM active. Ne configurez jamais le cron sur la copie : il pourrait écraser les images de l’actif avec les fichiers de la copie.
 
+Lors d’une bascule, `CIBLE` doit pointer vers la nouvelle VM copie.
+
 WordPress sur la copie peut écrire dans la base de lui-même, notamment avec `wp-cron` et les contrôles de santé. Ces écritures sur le réplica entrent en conflit avec la réplication et peuvent provoquer une erreur 1062 (clé dupliquée).
 
 ## Vérifier la réplication
