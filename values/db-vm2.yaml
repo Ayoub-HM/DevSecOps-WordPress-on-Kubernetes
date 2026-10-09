@@ -9,3 +9,8 @@ primary:
     limits:
       memory: 256Mi
       cpu: 300m
+  livenessProbe:
+    timeoutSeconds: 10
+    failureThreshold: 6
+  readinessProbe:
+    timeoutSeconds: 10
