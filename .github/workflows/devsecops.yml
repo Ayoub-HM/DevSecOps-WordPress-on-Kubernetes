@@ -28,22 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Trivy config (bloquant sur CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: config
-          scan-ref: .
-          severity: CRITICAL
-          exit-code: '1'
+        run: docker run --rm -v "$PWD:/src" aquasec/trivy:0.75.0 config --severity CRITICAL --exit-code 1 /src
       - name: Trivy image WordPress (rapport, non bloquant)
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: image
-          image-ref: docker.io/bitnami/wordpress:latest
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          format: table
-          output: trivy-image.txt
-          exit-code: '0'
+        run: docker run --rm aquasec/trivy:0.75.0 image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 docker.io/bitnami/wordpress:latest > trivy-image.txt
       - uses: actions/upload-artifact@v4
         with:
           name: trivy-image
