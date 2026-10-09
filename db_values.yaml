@@ -1,8 +1,7 @@
 auth:
-  rootPassword: "RootPass123!"
+  existingSecret: mariadb-credentials
   database: wordpress
   username: user
-  password: "DbPass123!"
 
 primary:
   persistence:
