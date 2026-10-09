@@ -48,3 +48,50 @@ jobs:
           framework: kubernetes,github_actions,secrets
           skip_check: CKV_SECRET_6,CKV_K8S_21
           soft_fail: false
+
+  semgrep:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer Semgrep
+        run: pip install --quiet semgrep==1.180.0
+      - name: Scanner le dépôt (bloquant si résultat)
+        run: semgrep scan --config p/default --metrics=off --error --json --output semgrep.json . || (semgrep scan --config p/default --metrics=off . ; exit 1)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: semgrep
+          path: semgrep.json
+
+  helm-rendu:
+    name: Manifestes Helm réels (Checkov + Trivy, rapport)
+    runs-on: ubuntu-latest
+    env:
+      FACTICE: ci-valeur-factice
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - name: Générer les manifestes (helm template, rien n'est installé)
+        run: |
+          mkdir -p rendu
+          helm template mariadb-release oci://registry-1.docker.io/bitnamicharts/mariadb --version 28.1.1 \
+            -f db_values.yaml -f values/db-vm2.yaml \
+            --set auth.rootPassword="$FACTICE" --set auth.password="$FACTICE" > rendu/mariadb.yaml
+          helm template wordpress-release oci://registry-1.docker.io/bitnamicharts/wordpress --version 34.1.3 \
+            -f wp_values.yaml -f values/wp-vm2.yaml \
+            --set wordpressPassword="$FACTICE" --set externalDatabase.password="$FACTICE" > rendu/wordpress.yaml
+          wc -l rendu/*.yaml
+      - name: Checkov sur les manifestes générés
+        run: |
+          pip install --quiet checkov==3.3.26
+          checkov -d rendu --framework kubernetes --soft-fail --compact -o cli -o json --output-file-path checkov-rendu
+      - name: Trivy config sur les manifestes générés
+        run: docker run --rm -v "$PWD/rendu:/src" aquasec/trivy:0.75.0 config --severity HIGH,CRITICAL --exit-code 0 /src | tee trivy-rendu.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manifestes-helm-scan
+          path: |
+            checkov-rendu
+            trivy-rendu.txt
