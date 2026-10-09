@@ -12,7 +12,7 @@ jobs:
     name: Secrets (gitleaks)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
       - name: Installer gitleaks
@@ -27,12 +27,12 @@ jobs:
     needs: [helm-rendu]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Trivy config (bloquant sur CRITICAL)
         run: docker run --rm -v "$PWD:/src" aquasec/trivy:0.75.0 config --severity CRITICAL --exit-code 1 /src
       - name: Trivy image WordPress (rapport, non bloquant)
         run: docker run --rm aquasec/trivy:0.75.0 image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 0 docker.io/bitnami/wordpress:latest > trivy-image.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: trivy-image
           path: trivy-image.txt
@@ -42,9 +42,9 @@ jobs:
     needs: [gitleaks]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Checkov
-        uses: bridgecrewio/checkov-action@v12
+        uses: bridgecrewio/checkov-action@c13aafd679d3814a25067d10fcaf98c4f7594931 # v12
         with:
           directory: .
           framework: kubernetes,github_actions,secrets
@@ -56,12 +56,12 @@ jobs:
     needs: [gitleaks]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Installer Semgrep
         run: pip install --quiet semgrep==1.180.0
       - name: Scanner le dépôt (bloquant si résultat)
         run: semgrep scan --config p/default --metrics=off --error --json --output semgrep.json . || (semgrep scan --config p/default --metrics=off . ; exit 1)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: semgrep
@@ -74,8 +74,8 @@ jobs:
     env:
       FACTICE: ci-valeur-factice
     steps:
-      - uses: actions/checkout@v4
-      - uses: azure/setup-helm@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: azure/setup-helm@1a275c3b69536ee54be43f2070a358922e12c8d4 # v4
       - name: Générer les manifestes (helm template, rien n'est installé)
         run: |
           mkdir -p rendu
@@ -92,7 +92,7 @@ jobs:
           checkov -d rendu --framework kubernetes --soft-fail --compact -o cli -o json --output-file-path checkov-rendu
       - name: Trivy config sur les manifestes générés
         run: docker run --rm -v "$PWD/rendu:/src" aquasec/trivy:0.75.0 config --severity HIGH,CRITICAL --exit-code 0 /src | tee trivy-rendu.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: manifestes-helm-scan
