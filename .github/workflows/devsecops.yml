@@ -24,6 +24,7 @@ jobs:
 
   trivy:
     name: Configuration et image (Trivy)
+    needs: [helm-rendu]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,6 +39,7 @@ jobs:
 
   checkov:
     name: IaC (Checkov)
+    needs: [gitleaks]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,6 +53,7 @@ jobs:
 
   semgrep:
     name: SAST (Semgrep)
+    needs: [gitleaks]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,6 +69,7 @@ jobs:
 
   helm-rendu:
     name: Manifestes Helm réels (Checkov + Trivy, rapport)
+    needs: [semgrep, checkov]
     runs-on: ubuntu-latest
     env:
       FACTICE: ci-valeur-factice
